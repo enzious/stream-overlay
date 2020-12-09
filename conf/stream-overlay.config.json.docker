@@ -1,0 +1,6 @@
+{
+  "twitch_password": "#PASSWORD",
+  "twitch_client_id": "#CLIENT_ID",
+  "twitch_bot_name": "#CLIENT_ID",
+  "twitch_channel_name": "#CLIENT_ID"
+}

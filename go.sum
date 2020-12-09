@@ -1,0 +1,4 @@
+github.com/foresthoffman/rgblog v0.0.0-20170809210153-1abc5df40e10 h1:WqTR8JH3LHb+SvKP2OyEPd7LPB3HTKVNmyc9Nfq/OfI=
+github.com/foresthoffman/rgblog v0.0.0-20170809210153-1abc5df40e10/go.mod h1:okY6DAV5bDbI2G/nUT5WEsRVsNcAbTk9IoB95z++Bz0=
+github.com/gorilla/websocket v1.4.2 h1:+/TMaTYc4QFitKJxsQ7Yye35DkWvkdLcvGKqM+x0Ufc=
+github.com/gorilla/websocket v1.4.2/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=

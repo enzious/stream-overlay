@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+
+  app-svc:
+    image: docker.fzn.im/stream-overlay-svc:latest
+    restart: always
+    environment:
+      - APP_TWITCH_CLIENT_ID=${APP_TWITCH_CLIENT_ID}
+      - APP_TWITCH_PASSWORD=${APP_TWITCH_PASSWORD}
+
+  app-web:
+    image: docker.fzn.im/stream-overlay-web:latest
+    depends_on:
+      - app-svc
+    restart: always
+    environment:
+      - APP_WEB_HOST_PUBLIC=${APP_WEB_HOST_PUBLIC}
+      - APP_WEB_PORT_PUBLIC=${APP_WEB_PORT_PUBLIC}
+      - APP_WEB_SECURE_PUBLIC=${APP_WEB_SECURE_PUBLIC}
+    ports:
+      - "${FUZION_WEB_PORT_INTERNAL}:80"

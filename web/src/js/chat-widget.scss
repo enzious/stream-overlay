@@ -1,0 +1,45 @@
+:host
+{
+  display: block;
+  height: 100%;
+
+  &, * {
+    box-sizing: border-box;
+  }
+
+  > :first-child
+  {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
+    padding: .125rem;
+
+    .message {
+      background: linear-gradient(
+        to right,
+        rgba(0,0,0,0) 0,
+        rgba(0,0,0,.5) 1.5rem,
+        rgba(0,0,0,.5) calc(100% - 1.5rem),
+        rgba(0,0,0,0) 100%
+      );
+      color: #FFFFFF;
+      padding: .25rem 1.125rem;
+      margin-top: .125rem;
+      border-radius: .25rem;
+      font-size: 1.25rem;
+      word-wrap: break-word;
+      word-break: break-word;
+
+      &.tts
+      {
+        border-top: 2px solid #CEE61B;
+        border-bottom: 2px solid #CEE61B;
+      }
+
+      > img {
+        vertical-align: middle;
+      }
+    }
+  }
+}

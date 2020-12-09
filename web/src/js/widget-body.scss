@@ -1,0 +1,14 @@
+:host
+{
+    display: block;
+    height: 100%;
+
+    &, * {
+      box-sizing: border-box;
+    }
+
+    > :first-child
+    {
+        height: 100%;
+    }
+}
