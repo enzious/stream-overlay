@@ -217,6 +217,11 @@ func (bb *BasicBot) HandleChat(hub *Hub) error {
 
 								bb.Disconnect()
 								return nil
+							case "clear":
+								message, _ := json.Marshal(&ClearChatEvent{
+									Type: "chat.clear",
+								})
+								hub.broadcast <- message
 							default:
 								// do nothing
 							}
