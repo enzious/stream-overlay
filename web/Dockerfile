@@ -7,9 +7,9 @@ RUN apk --update upgrade && \
     apk add --no-cache bash git openssh
 
 WORKDIR /home/node/fuzion-web
-COPY babel ./babel
 COPY src ./src
-COPY package.json webpack.config.js tsconfig.json ./
+COPY webpack ./webpack
+COPY package.json package-lock.json webpack.config.js tsconfig.json ./
 
 RUN npm install && \
     npm run build:release
