@@ -1,10 +1,11 @@
-import { customElement, html, LitElement } from 'lit-element';
+import { html, LitElement } from 'lit';
+import { customElement } from 'lit/decorators.js';
 
 import styles from './widget-body.scss?lit';
 
 @customElement('widget-body')
 export class WidgetBody extends LitElement {
-  static styles = styles;
+  static styles = [styles];
 
   connectedCallback() {
     super.connectedCallback();
@@ -23,8 +24,8 @@ export class WidgetBody extends LitElement {
   }
 
   render() {
-    return html(
+    return html`
       <slot></slot>
-    );
+    `;
   }
 }

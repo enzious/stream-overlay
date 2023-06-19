@@ -29,7 +29,8 @@ var config = function(env) {
     mode: profile.mode,
     target: 'web',
     entry: [
-      '@babel/polyfill',
+      'core-js/stable',
+      'regenerator-runtime/runtime',
       './src/js/index.ts',
     ],
     output: {
@@ -42,32 +43,42 @@ var config = function(env) {
           test: /\.(sa|sc|c)ss$/,
           oneOf: [
             {
-              resourceQuery: /lit/, // foo.scss?lit
+              resourceQuery: /lit/,
               use: [
-                { loader: 'lit-scss-loader', options: { minify: true } },
-                { loader: 'extract-loader' },
-                { loader: 'css-loader' },
-                { loader: 'resolve-url-loader', options: { sourceMap: true } },
+                { loader: 'lit-scss-loader', options: { minify: false } }, // profile.mode !== 'development' } },
+                { loader: path.resolve(__dirname, './webpack/escape-lit-scss.js') },
+                {
+                  loader: 'extract-loader',
+                  options: {
+                    publicPath: '',
+                    sourceMap: true,
+                  },
+                },
+                {
+                  loader: 'css-loader',
+                  options: { sourceMap: true, esModule: false },
+                },
                 {
                   loader: 'sass-loader',
                   options: {
                     sassOptions: {
-                      includePaths: ['.', './src', './node_modules'],
+                      includePaths: [ '.', './src', './node_modules' ],
                     },
+                    sourceMap: true,
                   },
                 },
               ],
             },
             {
               use: [
-                { loader: MiniCssExtractPlugin.loader },
+                { loader: MiniCssExtractPlugin.loader }, // options: { publicPath: '/' } },
                 { loader: 'css-loader', options: { sourceMap: true } },
                 { loader: 'resolve-url-loader', options: { sourceMap: true } },
                 {
                   loader: 'sass-loader',
                   options: {
                     sassOptions: {
-                      includePaths: ['.', './src', './node_modules'],
+                      includePaths: [ '.', './src', './node_modules' ],
                     },
                     sourceMap: true,
                   },
@@ -98,26 +109,25 @@ var config = function(env) {
         },
         {
           test: /\.tsx?$/,
-          exclude: path.resolve(__dirname, './node_modules/'),
           use: [
             {
               loader: 'babel-loader',
               options: {
                 presets: [
-                  ['@babel/preset-env', {
+                  [ '@babel/preset-env', {
                     corejs: '3.0.0',
                     useBuiltIns: 'entry',
-                  }],
+                  } ],
                 ],
-                plugins: [
-                  path.resolve(__dirname, './babel/plugins/jsx-to-lit-html.js'),
-                ]
-              }
+              },
             },
             {
-              loader: 'ts-loader'
+              loader: 'ts-loader',
+              options: {
+                configFile: path.resolve(__dirname, 'tsconfig.json'),
+              },
             },
-          ]
+          ],
         },
         {
           test: /\.hbs$/,
@@ -172,7 +182,6 @@ var config = function(env) {
         },
         hash: true
       })),
-      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
       new webpack.DefinePlugin({
         'process.env.PUBLIC_PATH': JSON.stringify(profile.outputPath),
       }),
@@ -190,23 +199,33 @@ var config = function(env) {
     },
     devtool: env.profile === 'debug' ? 'inline-source-map' : false,
     devServer: {
-      contentBase: path.resolve('build/' + env.profile),
-      publicPath: '/',
-      watchContentBase: true,
       historyApiFallback: {
         index: 'index.html'
       },
       host: '0.0.0.0',
-      port: 8885,
-      disableHostCheck: true,
+      port: 11885,
+      allowedHosts: 'all',
+      webSocketServer: {
+        type: 'ws',
+        options: {
+          path: '/wds',
+        },
+      },
+      static: [
+        {
+          directory: path.resolve(__dirname, `public`),
+          publicPath: '/',
+          watch: true,
+        },
+      ],
       proxy: {
         '/ws': {
-          target: 'ws://127.0.0.1:8884',
+          target: 'ws://127.0.0.1:11884',
           ws: true,
           secure: false
         },
         '/api': {
-          target: 'http://127.0.0.1:8884',
+          target: 'http://127.0.0.1:11884',
           secure: false
         },
         headers: {

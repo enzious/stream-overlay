@@ -14,13 +14,13 @@ export class Service extends EventEmitter<{
 
   socket: WebSocket;
 
-  emoticons: Emoticon[];
+  emoticons: Emoticon[] = [];
   emoticonsMap: Map<string, Emoticon> = new Map();
 
   private constructor(){
     super();
 
-    this.getEmoteList();
+    // this.getEmoteList();
     this.connectSocket();
   }
 

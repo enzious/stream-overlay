@@ -1,7 +1,8 @@
-import { customElement, html, LitElement, internalProperty } from 'lit-element';
-import { unsafeHTML } from 'lit-html/directives/unsafe-html.js';
-import { classMap } from 'lit-html/directives/class-map.js';
-import { styleMap } from 'lit-html/directives/style-map.js';
+import { html, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
+import { styleMap } from 'lit/directives/style-map.js';
+import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
 import { Service } from 'js/service';
 import { Message } from 'js/domain/chat';
@@ -33,15 +34,18 @@ const generateUserColor = (name) => {
 
 @customElement('chat-widget')
 export class ChatWidget extends LitElement {
-  static styles = styles;
+  static styles = [styles];
 
   service = Service.getInstance();
 
-  @internalProperty()
+  @property()
   messages: Message[] = [];
 
   connectedCallback() {
     super.connectedCallback();
+
+    console.log('styles', ChatWidget.styles, styles);
+
     this.service.on('message', (msg) => {
       this.messages = [
         ...(this.messages.length == 120 ? this.messages.splice(1) : this.messages),
@@ -54,22 +58,22 @@ export class ChatWidget extends LitElement {
   }
 
   render() {
-    return html(
+    return html`
       <div>
-        {
+        ${
           this.messages.map(({ from, body, displayName, color, tts }) => {
-            return html(
-              <div className={classMap({
+            return html`
+              <div class=${classMap({
                 message: true,
                 tts,
               })}>
-                <span style={styleMap({ color: color || generateUserColor(displayName) })}>{displayName || from}</span>:
-                {unsafeHTML(this.service.translate(body))}
+                <span style=${styleMap({ color: color || generateUserColor(displayName) })}>${displayName || from}</span>:
+                ${unsafeHTML(this.service.translate(body))}
               </div>
-            );
+            `;
           })
         }
       </div>
-    );
+    `;
   }
 }

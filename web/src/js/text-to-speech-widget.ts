@@ -1,4 +1,5 @@
-import { customElement, html, LitElement, internalProperty } from 'lit-element';
+import { html, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 
 import { Service } from 'js/service';
 import { MessageEvent } from 'js/domain/chat';
@@ -11,14 +12,14 @@ interface TtsOptions {
 
 @customElement('text-to-speech-widget')
 export class TextToSpeechWidget extends LitElement {
-  static styles = styles;
+  static styles = [styles];
 
   service = Service.getInstance();
 
-  @internalProperty()
+  @property()
   voices: SpeechSynthesisVoice[] = window.speechSynthesis.getVoices();
 
-  @internalProperty()
+  @property()
   defaultVoiceIdx?: number;
 
   ttsQueue: [string, TtsOptions][] = [];
@@ -51,7 +52,7 @@ export class TextToSpeechWidget extends LitElement {
     }
     this.speaking = true;
 
-    const [ text, options ] = this.ttsQueue.shift();
+    const [text, options] = this.ttsQueue.shift();
     this.speech.text = text;
     this.speech.voice = this.voices[options?.voice || this.defaultVoiceIdx];
     console.log('saying', text);
@@ -60,7 +61,7 @@ export class TextToSpeechWidget extends LitElement {
 
   queueTts(text: string[], options: TtsOptions = {}) {
     this.ttsQueue = this.ttsQueue.concat(text.map((value) => {
-      return [ value, options ];
+      return [value, options];
     }));
     this.startTtsQueue();
   }
@@ -81,7 +82,7 @@ export class TextToSpeechWidget extends LitElement {
   }
 
   handleVoiceChange = (evt: InputEvent) => {
-    const { target : { value = undefined } = {}  } = evt as any;
+    const { target: { value = undefined } = {} } = evt as any;
     if (value) {
       this.defaultVoiceIdx = parseInt(value, 10);
     }
@@ -100,25 +101,25 @@ export class TextToSpeechWidget extends LitElement {
   }
 
   render() {
-    return html(
+    return html`
       <div>
         <div>
           <select
-            _eventChange={this.handleVoiceChange}
+            _eventChange=${this.handleVoiceChange}
           >
-            {
+            ${
               this.voices.map((voice, i) => {
                 const { name } = voice;
-                return html(
+                return html`
                   <option
-                    value={i}
-                  >{name}{voice.default ? ' (Default)' : ''}</option>
-                );
+                    value=${i}
+                  >${name}${voice.default ? ' (Default)' : ''}</option>
+                `;
               })
             }
           </select>
         </div>
       </div>
-    );
+    `;
   }
 }

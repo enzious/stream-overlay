@@ -8,6 +8,8 @@ services:
     environment:
       - APP_TWITCH_CLIENT_ID=${APP_TWITCH_CLIENT_ID}
       - APP_TWITCH_PASSWORD=${APP_TWITCH_PASSWORD}
+    ports:
+      - "11884:8884"
 
   app-web:
     image: docker.fzn.im/stream-overlay-web:latest
