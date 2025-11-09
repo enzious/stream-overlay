@@ -5,9 +5,9 @@
   "homepage": "./",
   "scripts": {
     "build:debug": "mkdir -p build/debug && cross-env webpack --env profile=debug",
-    "start:debug": "webpack-dev-server --env profile=debug --env bundle-analyzer=true",
+    "serve:debug": "webpack-dev-server --env profile=debug --env bundle-analyzer=true",
     "build:release": "mkdir -p build/release && cross-env webpack --env profile=release",
-    "start:release": "webpack-dev-server --env profile=release --env bundle-analyzer=true"
+    "serve:release": "webpack-dev-server --env profile=release --env bundle-analyzer=true"
   },
   "devDependencies": {
     "@babel/cli": "7.18.10",
@@ -28,7 +28,7 @@
     "handlebars-loader": "1.7.1",
     "howler": "2.2.0",
     "html-webpack-plugin": "5.5.0",
-    "lit": "2.7.4",
+    "lit": "^3.2.1",
     "lit-scss-loader": "^1.1.0",
     "mini-css-extract-plugin": "2.7.2",
     "resize-observer-polyfill": "1.5.1",

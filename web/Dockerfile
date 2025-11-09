@@ -7,12 +7,16 @@ RUN apk --update upgrade && \
     apk add --no-cache bash git openssh
 
 WORKDIR /home/node/fuzion-web
+
+COPY package.json package-lock.json ./
+
+RUN npm install
+
+COPY webpack.config.js tsconfig.json ./
 COPY src ./src
 COPY webpack ./webpack
-COPY package.json package-lock.json webpack.config.js tsconfig.json ./
 
-RUN npm install && \
-    npm run build:release
+RUN npm run build:release
 
 FROM nginx:alpine
 
